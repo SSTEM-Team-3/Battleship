@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const infoDisplay = document.querySelector('#info')
   const setupButtons = document.getElementById('setup-buttons')
   const userSquares = []
+  const userSquaresSelected = []
   const computerSquares = []
   let isHorizontal = true
   let isGameOver = false
@@ -24,6 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let enemyReady = false
   let allShipsPlaced = false
   let shotFired = -1
+  //Selected Board
+  for (let i=0; i <100; i++) {
+    userSquaresSelected[i] = false
+  }
   //Ships
   const shipArray = [
     {
@@ -340,7 +345,13 @@ document.addEventListener('DOMContentLoaded', () => {
       turnDisplay.innerHTML = 'Your Go'
       computerSquares.forEach(square => square.addEventListener('click', function(e) {
         shotFired = square.dataset.id
-        revealSquare(square.classList)
+        if (userSquaresSelected[shotFired] === false) {
+            computerSquares.forEach(square => square.removeEventListener('click'))
+            userSquaresSelected[shotFired] = true
+            revealSquare(square.classList)
+        }
+        else
+            playGameSingle()
       }))
     }
     if (currentPlayer === 'enemy') {
@@ -384,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function enemyGo(square) {
     if (gameMode === 'singlePlayer') square = Math.floor(Math.random() * userSquares.length)
-    if (!userSquares[square].classList.contains('boom')) {
+    if (!userSquares[square].classList.contains('boom') && !userSquares[square].classList.contains('miss')) {
       const hit = userSquares[square].classList.contains('taken')
       userSquares[square].classList.add(hit ? 'boom' : 'miss')
       if (userSquares[square].classList.contains('destroyer')) cpuDestroyerCount++
@@ -393,7 +404,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (userSquares[square].classList.contains('battleship')) cpuBattleshipCount++
       if (userSquares[square].classList.contains('carrier')) cpuCarrierCount++
       checkForWins()
-    } else if (gameMode === 'singlePlayer') enemyGo()
+    } else {
+        // enemyGo()
+    }
     currentPlayer = 'user'
     turnDisplay.innerHTML = 'Your Go'
   }
