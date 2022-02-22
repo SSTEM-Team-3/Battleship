@@ -175,8 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
     generate(shipArray[4])
 
     startButton.addEventListener('click', () => {
-      setupButtons.style.display = 'none'
-      playGameSingle()
+      if (allShipsPlaced) {
+        setupButtons.style.display = 'none'
+        playGameSingle()
+      }
     })
   }
 
@@ -306,7 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else return
 
     displayGrid.removeChild(draggedShip)
-    if(!displayGrid.querySelector('.ship')) allShipsPlaced = true
+    if(!displayGrid.querySelector('.ship')) {
+         console.log("ships placed")
+         allShipsPlaced = true
+    }
   }
 
   function dragEnd() {
@@ -346,17 +351,20 @@ document.addEventListener('DOMContentLoaded', () => {
       computerSquares.forEach(square => square.addEventListener('click', function(e) {
         shotFired = square.dataset.id
         if (userSquaresSelected[shotFired] === false) {
-            computerSquares.forEach(square => square.removeEventListener('click'))
+            computerSquares.forEach(square => square.removeEventListener('click', null))
+           // console.log(shotFired)
             userSquaresSelected[shotFired] = true
             revealSquare(square.classList)
         }
-        else
-            playGameSingle()
+   //     else
+   //         playGameSingle()
       }))
     }
     if (currentPlayer === 'enemy') {
       turnDisplay.innerHTML = 'Computers Go'
-      setTimeout(enemyGo, 1000)
+      console.log("calling enemy go")
+      setTimeout(enemyGo, 2000)
+      return
     }
   }
 
@@ -395,6 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function enemyGo(square) {
     if (gameMode === 'singlePlayer') square = Math.floor(Math.random() * userSquares.length)
+   // console.log("Enemy is going")
     if (!userSquares[square].classList.contains('boom') && !userSquares[square].classList.contains('miss')) {
       const hit = userSquares[square].classList.contains('taken')
       userSquares[square].classList.add(hit ? 'boom' : 'miss')
