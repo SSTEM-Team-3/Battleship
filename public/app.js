@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (userSquares[square].classList.contains('carrier')) cpuCarrierCount++
       checkForWins()
     } else {
-        // enemyGo()
+         enemyGo()
     }
     currentPlayer = 'user'
     turnDisplay.innerHTML = 'Your Go'
