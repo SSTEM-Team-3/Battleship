@@ -373,19 +373,37 @@ document.addEventListener('DOMContentLoaded', () => {
   let cruiserCount = 0
   let battleshipCount = 0
   let carrierCount = 0
+  let totalCount = 0
 
   function revealSquare(classList) {
     const enemySquare = computerGrid.querySelector(`div[data-id='${shotFired}']`)
     const obj = Object.values(classList)
     if (!enemySquare.classList.contains('boom') && currentPlayer === 'user' && !isGameOver) {
-      if (obj.includes('destroyer')) destroyerCount++
-      if (obj.includes('submarine')) submarineCount++
-      if (obj.includes('cruiser')) cruiserCount++
-      if (obj.includes('battleship')) battleshipCount++
-      if (obj.includes('carrier')) carrierCount++
+      if (obj.includes('destroyer')) {
+          destroyerCount++
+          console.log("destroyerCount: " + destroyerCount + "\n")
+      }
+      if (obj.includes('submarine')) {
+           submarineCount++
+           console.log("submarineCount: " + submarineCount + "\n")
+      }
+      if (obj.includes('cruiser')) {
+          cruiserCount++
+          console.log("cruiserCount: " + cruiserCount + "\n")
+      }
+      if (obj.includes('battleship')) {
+          battleshipCount++
+          console.log("battleshipCount: " + battleshipCount + "\n")
+      }
+      if (obj.includes('carrier')) {
+          carrierCount++
+          console.log("carrierCount: " + carrierCount + "\n")
+      }
     }
     if (obj.includes('taken')) {
       enemySquare.classList.add('boom')
+      totalCount++
+      console.log("totalCount: " + totalCount +"\n")
     } else {
       enemySquare.classList.add('miss')
     }
@@ -464,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cpuCarrierCount = 10
     }
 
-    if ((destroyerCount + submarineCount + cruiserCount + battleshipCount + carrierCount) === 50) {
+    if (((destroyerCount + submarineCount + cruiserCount + battleshipCount + carrierCount) === 50) || (totalCount === 17)) {
       infoDisplay.innerHTML = "YOU WIN"
       gameOver()
     }
