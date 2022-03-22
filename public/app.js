@@ -377,36 +377,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function revealSquare(classList) {
     const enemySquare = computerGrid.querySelector(`div[data-id='${shotFired}']`)
-    const obj = Object.values(classList)
-    if (!enemySquare.classList.contains('boom') && currentPlayer === 'user' && !isGameOver) {
-      if (obj.includes('destroyer')) {
+    //const obj = Object.values(classList)
+    if (!classList.contains('boom') && !classList.contains('miss')) {
+      const hit = classList.contains('taken')
+      classList.add(hit ? 'boom' : 'miss')
+      if (classList.contains('destroyer')) {
           destroyerCount++
           console.log("destroyerCount: " + destroyerCount + "\n")
       }
-      if (obj.includes('submarine')) {
+      if (classList.contains('submarine')) {
            submarineCount++
            console.log("submarineCount: " + submarineCount + "\n")
       }
-      if (obj.includes('cruiser')) {
+      if (classList.contains('cruiser')) {
           cruiserCount++
           console.log("cruiserCount: " + cruiserCount + "\n")
       }
-      if (obj.includes('battleship')) {
+      if (classList.contains('battleship')) {
           battleshipCount++
           console.log("battleshipCount: " + battleshipCount + "\n")
       }
-      if (obj.includes('carrier')) {
+      if (classList.contains('carrier')) {
           carrierCount++
           console.log("carrierCount: " + carrierCount + "\n")
       }
     }
-    if (obj.includes('taken')) {
+    /*
+    if (classList('taken')) {
       enemySquare.classList.add('boom')
       totalCount++
-      console.log("totalCount: " + totalCount +"\n")
+   //   console.log("totalCount: " + totalCount +"\n")
     } else {
       enemySquare.classList.add('miss')
-    }
+    }*/
     checkForWins()
     currentPlayer = 'enemy'
     if(gameMode === 'singlePlayer') playGameSingle()
@@ -425,11 +428,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!userSquares[square].classList.contains('boom') && !userSquares[square].classList.contains('miss')) {
       const hit = userSquares[square].classList.contains('taken')
       userSquares[square].classList.add(hit ? 'boom' : 'miss')
-      if (userSquares[square].classList.contains('destroyer')) cpuDestroyerCount++
-      if (userSquares[square].classList.contains('submarine')) cpuSubmarineCount++
-      if (userSquares[square].classList.contains('cruiser')) cpuCruiserCount++
-      if (userSquares[square].classList.contains('battleship')) cpuBattleshipCount++
-      if (userSquares[square].classList.contains('carrier')) cpuCarrierCount++
+      if (userSquares[square].classList.contains('destroyer')) {
+          cpuDestroyerCount++
+          console.log("cpuDestroyerCount = " + cpuDestroyerCount + "\n")
+      }
+      if (userSquares[square].classList.contains('submarine')) {
+          cpuSubmarineCount++
+          console.log("cpuSubmarineCount = " + cpuSubmarineCount + "\n")
+      }
+      if (userSquares[square].classList.contains('cruiser')) {
+          cpuCruiserCount++
+          console.log("cpuCruiserCount = " + cpuCruiserCount + "\n")
+      }
+      if (userSquares[square].classList.contains('battleship')) {
+          cpuBattleshipCount++
+          console.log("cpuBattleshipCount = " + cpuBattleshipCount + "\n")
+      }
+      if (userSquares[square].classList.contains('carrier')) {
+          cpuCarrierCount++
+          console.log("cpuCarrierCount = " + cpuCarrierCount + "\n")
+      }
       checkForWins()
     } else {
          enemyGo()
