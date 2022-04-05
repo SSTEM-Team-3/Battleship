@@ -176,11 +176,13 @@ body {
   border: 1px solid hsla(0, 0%, 100%, .2);
 }
 
-.destroyer-container {
+.destroyer-container, 
+.destroyer2-container {
   --width: 2;
 }
 
-.destroyer-container-vertical {
+.destroyer-container-vertical,
+.destroyer2-container-vertical {
   --height: 2;
   --width: 1;
 }
