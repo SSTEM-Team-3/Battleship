@@ -77,10 +77,16 @@ body {
   border-radius: 0 !important;
 }
 
-.taken,
-.ship {
+.ship,
+.taken {
   position: relative;
   background-color: hsl(0, 0%, 80%);
+}
+
+.mine,
+.takenM {
+  position: relative;
+  background-color: black;
 }
 
 .taken.start.vertical,
@@ -158,12 +164,14 @@ body {
   display: flex;
 }
 
-.ship > div {
+.ship > div,
+.mine > div {
   width: 4.6vmin;
   height: 4.6vmin;
 }
 
-.ship {
+.ship, 
+.mine {
   display: flex;
   flex-wrap: wrap;
   margin: 1vmin;
@@ -174,6 +182,11 @@ body {
 
 .battleship-grid div {
   border: 1px solid hsla(0, 0%, 100%, .2);
+}
+
+.mine1-container {
+  background-color: black;
+  --width: 1;
 }
 
 .destroyer-container, 
@@ -227,14 +240,16 @@ body {
 }
 
 .miss,
-.boom {
+.boom,
+.mineboom {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .boom::after,
-.miss::after {
+.miss::after,
+.mineboom::after {
   content: '';
   position: absolute;
   border-radius: 100%;
@@ -250,6 +265,11 @@ body {
   background-color: red;
 }
 
+.mineboom::after {
+  background-color: red;
+}
+
+
 .miss::before {
   content: '';
   position: absolute;
@@ -260,7 +280,8 @@ body {
   height: 2vmin;
 }
 
-.boom {
+.boom,
+.mineboom {
   animation: boom .2s ease-out forwards;
 }
 
@@ -283,6 +304,16 @@ body {
 
   100% {
     background-color: hsl(0, 0%, 80%);
+  }
+}
+
+@keyframes mineboom {
+  0% {
+    background-color: red;
+  }
+
+  100% {
+    background-color: black;
   }
 }
 

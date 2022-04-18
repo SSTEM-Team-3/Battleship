@@ -2,13 +2,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const userGrid = document.querySelector('.grid-user')
   const computerGrid = document.querySelector('.grid-computer')
   const displayGrid = document.querySelector('.grid-display')
-  const ships = document.querySelectorAll('.ship')
+  const ships = document.querySelectorAll('.ship, .mine')
+  //const mines = document.querySelectorAll('.mine')
   const destroyer = document.querySelector('.destroyer-container')
   const destroyer2 = document.querySelector('.destroyer2-container')
   const submarine = document.querySelector('.submarine-container')
   const cruiser = document.querySelector('.cruiser-container')
   const battleship = document.querySelector('.battleship-container')
   const carrier = document.querySelector('.carrier-container')
+  const mine1 = document.querySelector('.mine1-container')
+  const mine2 = document.querySelector('.mine2-container')
+  const mine3 = document.querySelector('.mine3-container')
+  const mine4 = document.querySelector('.mine4-container')
   const startButton = document.querySelector('#start')
   const rotateButton = document.querySelector('#rotate')
   const turnDisplay = document.querySelector('#whose-go')
@@ -32,6 +37,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   //Ships
   const shipArray = [
+    {
+      name: 'mine1',
+      directions: [
+        [0],
+        [0]
+      ]
+    },
+    {
+      name: 'mine2',
+      directions: [
+        [0],
+        [0]
+      ]
+    },
+    {
+      name: 'mine3',
+      directions: [
+        [0],
+        [0]
+      ]
+    },
+    {
+      name: 'mine4',
+      directions: [
+        [0],
+        [0]
+      ]
+    },
     {
       name: 'destroyer',
       directions: [
@@ -183,6 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
     generate(shipArray[3])
     generate(shipArray[4])
     generate(shipArray[5])
+    generate(shipArray[6])
+    generate(shipArray[7])
+    generate(shipArray[8])
+    generate(shipArray[9])
 
     startButton.addEventListener('click', () => {
       if (allShipsPlaced) {
@@ -213,9 +250,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const isTaken = current.some(index => computerSquares[randomStart + index].classList.contains('taken'))
     const isAtRightEdge = current.some(index => (randomStart + index) % width === width - 1)
     const isAtLeftEdge = current.some(index => (randomStart + index) % width === 0)
-
-    if (!isTaken && !isAtRightEdge && !isAtLeftEdge) current.forEach(index => computerSquares[randomStart + index].classList.add('taken', ship.name))
-
+    
+    //console.log(ship.name + "\n")
+    //if (ship.name != 'mine1' && ship.name != 'mine2' && ship.name != 'mine3' && ship.name != 'mine4') {
+        if (!isTaken && !isAtRightEdge && !isAtLeftEdge) {
+            current.forEach(index => computerSquares[randomStart + index].classList.add('taken', ship.name))
+      //      console.log("taken\n")
+        }
+    //}
+    //else if (!isTaken && !isAtRightEdge && !isAtLeftEdge) {
+      //  current.forEach(index => computerSquares[randomStart + index].classList.add('takenM', ship.name))
+        //console.log("takenM\n")
+    //}
+    
     else generate(ship)
   }
   
@@ -249,6 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //move around user ship
   ships.forEach(ship => ship.addEventListener('dragstart', dragStart))
+  //mines.forEach(mine => mine.addEventListener('dragstart', dragStart))
   userSquares.forEach(square => square.addEventListener('dragstart', dragStart))
   userSquares.forEach(square => square.addEventListener('dragover', dragOver))
   userSquares.forEach(square => square.addEventListener('dragenter', dragEnter))
@@ -259,11 +307,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedShipNameWithIndex
   let draggedShip
   let draggedShipLength
+  //let selectedMineNameWithIndex
+  //let draggedMine
 
   ships.forEach(ship => ship.addEventListener('mousedown', (e) => {
     selectedShipNameWithIndex = e.target.id
     // console.log(selectedShipNameWithIndex)
   }))
+
+  /*mines.forEach(mine => mine.addEventListener('mousedown', (e) => {
+    selectedMineNameWithIndex = e.target.id
+  }))*/
 
   function dragStart() {
     draggedShip = this
@@ -284,7 +338,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function dragDrop() {
+    console.log(draggedShip.lastChild.id)
     let shipNameWithLastId = draggedShip.lastChild.id
+    //console.log(shipNameWithLastId)
     let shipClass = shipNameWithLastId.slice(0, -2)
     //console.log(shipClass + "\n")
     let lastShipIndex = parseInt(shipNameWithLastId.substr(-1))
@@ -297,8 +353,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let newNotAllowedVertical = notAllowedVertical.splice(0, 10 * lastShipIndex)
 
     selectedShipIndex = parseInt(selectedShipNameWithIndex.substr(-1))
+   // selectedMineIndex = parseInt(selectedMineNameWithIndex.substr(-1))
 
     shipLastId = shipLastId - selectedShipIndex
+    //mineLastId = shipLastId - selectedMineIndex
     // console.log(shipLastId)
 
     if (isHorizontal && !newNotAllowedHorizontal.includes(shipLastId)) {
@@ -306,7 +364,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let directionClass
         if (i === 0) directionClass = 'start'
         if (i === draggedShipLength - 1) directionClass = 'end'
-        userSquares[parseInt(this.dataset.id) - selectedShipIndex + i].classList.add('taken', 'horizontal', directionClass, shipClass)
+        userSquares[parseInt(this.dataset.id) - selectedShipIndex + i].classList.add('horizontal', directionClass, shipClass)
+        if (shipClass != 'mine1' && shipClass != 'mine2' && shipClass != 'mine3' && shipClass != 'mine4')
+            //it's a ship
+            userSquares[parseInt(this.dataset.id) - selectedShipIndex + i].classList.add('taken')
+        else {
+            userSquares[parseInt(this.dataset.id) - selectedShipIndex + i].classList.add('takenM')
+        }
       }
     //As long as the index of the ship you are dragging is not in the newNotAllowedVertical array! This means that sometimes if you drag the ship by its
     //index-1 , index-2 and so on, the ship will rebound back to the displayGrid.
@@ -315,7 +379,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let directionClass
         if (i === 0) directionClass = 'start'
         if (i === draggedShipLength - 1) directionClass = 'end'
-        userSquares[parseInt(this.dataset.id) - selectedShipIndex + width*i].classList.add('taken', 'vertical', directionClass, shipClass)
+        //console.log(userSquares[parseInt(this.dataset.id) - selectedShipIndex + width*i].classList)
+        userSquares[parseInt(this.dataset.id) - selectedShipIndex + width*i].classList.add('vertical', directionClass, shipClass)
+        if (shipClass != 'mine1' && shipClass != 'mine2' && shipClass != 'mine3' && shipClass != 'mine4')
+            userSquares[parseInt(this.dataset.id) - selectedShipIndex + width*i].classList.add('taken')
+        else {
+            //it's a mine!
+            userSquares[parseInt(this.dataset.id) - selectedShipIndex + width*i].classList.add('takenM')
+        }
       }
     } else return
 
@@ -374,8 +445,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (currentPlayer === 'enemy') {
       turnDisplay.innerHTML = 'Computers Go'
-      console.log("calling enemy go")
-      setTimeout(enemyGo, 5000)
+   //   console.log("calling enemy go")
+      setTimeout(enemyGo, 2000)
       return
     }
   }
@@ -392,9 +463,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function revealSquare(classList) {
     const enemySquare = computerGrid.querySelector(`div[data-id='${shotFired}']`)
     //const obj = Object.values(classList)
-    if (!classList.contains('boom') && !classList.contains('miss')) {
+    if (!classList.contains('boom') && !classList.contains('miss') && !classList.contains('mineboom')) {
       const hit = classList.contains('taken')
       classList.add(hit ? 'boom' : 'miss')
+      if (classList.contains('mine1') || classList.contains('mine2') || classList.contains('mine3') || classList.contains('mine4')) {
+            infoDisplay.innerHTML = "Careful! You hit one of the Computer's mines!"
+            console.log("YOU HIT A MINE!\n")
+            enemyGo()
+      }
       if (classList.contains('destroyer')) {
           destroyerCount++
           console.log("destroyerCount: " + destroyerCount + "\n")
@@ -441,43 +517,141 @@ document.addEventListener('DOMContentLoaded', () => {
   let cpuCarrierCount = 0
   let cpuShipsSunk = 0
   let cpuDestroyerPoss = []
-
+  let turn = true
+  
+  let cpuGuess = [0,2,4,6,8,11,13,15,17,19,20,22,24,26,28,31,33,35,37,39,40,42,44,46,48,51,53,55,57,59,60,62,64,66,68,71,73,75,77,79,80,82,84,86,88,91,93,95,97,99]
+  let cpuGuessAfterHit = [[1,2,3,70],[4,5,6,71],[7,8,9,72],[10,11,12,73]]
+  let left = []
+  let right = []
+  let up = []
+  let down = []
+  let cpuGAH = false
+  let cpuA = 0
+  let cpuB = 0
+  let cpuShipsSunkCheck = 1
 
   function enemyGo(square) {
-    if (gameMode === 'singlePlayer') square = Math.floor(Math.random() * userSquares.length)
+    if (turn === false) {
+        infoDisplay.innerHTML = "skipping CPU's turn"
+        currentPlayer = 'user'
+        turnDisplay.innerHTML = 'Your Go'
+        turn = true
+        return
+    }
+    
+    if(cpuGAH) {
+        square = cpuGuessAfterHit[cpuA][cpuB]
+        cpuB++
+        if (!userSquares[square].classList.contains('taken')) {
+            cpuA++
+            cpuB = 0
+        } 
+    }
+    else {
+        square = cpuGuess[Math.floor(Math.random()*cpuGuess.length)]
+    }
+
+    //if (gameMode === 'singlePlayer') square = Math.floor(Math.random() * userSquares.length)
    // console.log("Enemy is going")
-    if (!userSquares[square].classList.contains('boom') && !userSquares[square].classList.contains('miss')) {
+    if (!userSquares[square].classList.contains('boom') && !userSquares[square].classList.contains('miss') && !userSquares[square].classList.contains('mineboom')) {
       const hit = userSquares[square].classList.contains('taken')
-      userSquares[square].classList.add(hit ? 'boom' : 'miss')
+      const hitM = userSquares[square].classList.contains('takenM')
+      if (hitM) userSquares[square].classList.add('mineboom')
+      else {
+          userSquares[square].classList.add(hit ? 'boom' : 'miss')
+      }
+      //Jakon's AI code
+      if (hit && !cpuGAH) {
+          left = [square - 1, square - 2, square - 3, square - 4]
+          for (i=3; i> -1; i--) {
+              if (left[i] > 99 || left[i] < 0) {
+                  left.splice(i,1)
+              }
+          }
+          right = [square + 1, square + 2, square + 3, square + 4]
+          for (i=3; i > -1; i--) {
+              if (right[i] > 99 || right[i] < 0) {
+                  right.splice(i,1)
+              }
+          }
+          up = [square - 10, square - 20, square - 30, square - 40]
+          for (i=3; i > -1; i--) {
+              if (up[i] > 99 || up[i] < 0) {
+                  up.splice(i,1)
+              }
+          }
+          down = [square + 10, square + 20, square + 30, square + 40]
+          for (i=3; i > -1; i--) {
+              if (down[i] > 99 || down[i] < 0) {
+                  down.splice(i, 1)
+              }
+          }
+          cpuGuessAfterHit = [left, right, up, down]
+          cpuGAH = true
+      }
+      if (cpuShipsSunk === cpuShipsSunkCheck) {
+          cpuShipsSunkCheck++
+          cpuGAH = false
+      }
+       //end Jakon's AI
+      if (userSquares[square].classList.contains('mine1')) {
+          infoDisplay.innerHTML = 'The CPU hit a mine!'
+          turn = false
+          console.log("hitM = " + hitM + "\n")   
+          console.log("hit = " + hit + "\n")
+          console.log("CPU HIT A MINE!\n")
+      }
+      if (userSquares[square].classList.contains('mine2')) {
+          infoDisplay.innerHTML = 'The CPU hit a mine!'
+          turn = false
+          console.log("hitM = " + hitM + "\n")
+          console.log("hit = " + hit + "\n")
+          console.log("MINE\n")
+      }
+      if (userSquares[square].classList.contains('mine3')) {
+          infoDisplay.innerHTML = 'The CPU hit a mine!'
+          turn = false
+          console.log("hitM = " + hitM + "\n")
+          console.log("hit = " + hit + "\n")
+          console.log("MINE\n")
+      }
+      if (userSquares[square].classList.contains('mine4')) {
+          infoDisplay.innerHTML = 'The CPU hit a mine!'
+          turn = false
+          console.log("hitM = " + hitM + "\n")
+          console.log("hit = " + hit + "\n")
+          console.log("MINE\n")
+      }
       if (userSquares[square].classList.contains('destroyer')) {
           cpuDestroyerCount++
-          console.log("cpuDestroyerCount = " + cpuDestroyerCount + "\n")
+     //     console.log("cpuDestroyerCount = " + cpuDestroyerCount + "\n")
       }
       if (userSquares[square].classList.contains('destroyer2')) {
           cpuDestroyer2Count++
-          console.log("cpuDestroyer2Count = " + cpuDestroyer2Count + "\n")
+       //   console.log("cpuDestroyer2Count = " + cpuDestroyer2Count + "\n")
       }
       if (userSquares[square].classList.contains('submarine')) {
           cpuSubmarineCount++
-          console.log("cpuSubmarineCount = " + cpuSubmarineCount + "\n")
+       //   console.log("cpuSubmarineCount = " + cpuSubmarineCount + "\n")
       }
       if (userSquares[square].classList.contains('cruiser')) {
           cpuCruiserCount++
-          console.log("cpuCruiserCount = " + cpuCruiserCount + "\n")
+       //   console.log("cpuCruiserCount = " + cpuCruiserCount + "\n")
       }
       if (userSquares[square].classList.contains('battleship')) {
           cpuBattleshipCount++
-          console.log("cpuBattleshipCount = " + cpuBattleshipCount + "\n")
+       //   console.log("cpuBattleshipCount = " + cpuBattleshipCount + "\n")
       }
       if (userSquares[square].classList.contains('carrier')) {
           cpuCarrierCount++
-          console.log("cpuCarrierCount = " + cpuCarrierCount + "\n")
+       //   console.log("cpuCarrierCount = " + cpuCarrierCount + "\n")
       }
       checkForWins()
     } else {
          enemyGo()
     }
     currentPlayer = 'user'
+    //infoDisplay.innerHTML = ''
     turnDisplay.innerHTML = 'Your Go'
   }
 
