@@ -538,8 +538,19 @@ document.addEventListener('DOMContentLoaded', () => {
         turn = true
         return
     }
-    
-    if(cpuGAH) {
+    if (cpuShipsSunk === cpuShipsSunkCheck) {
+        cpuShipsSunkCheck++
+        left = []
+        right = []
+        up = []
+        down = []
+        cpuA = 0
+        cpuB = 0
+        cpuGAH = false
+    }
+    if (cpuGAH) {
+        console.log("cpuShipsSunk: " + cpuShipsSunk + "\n")
+        console.log("cpuShipsSunkCheck: " + cpuShipsSunkCheck + "\n")
         square = cpuGuessAfterHit[cpuA][cpuB]
         cpuB++
         if (!userSquares[square].classList.contains('taken')) {
@@ -589,38 +600,38 @@ document.addEventListener('DOMContentLoaded', () => {
           cpuGuessAfterHit = [left, right, up, down]
           cpuGAH = true
       }
-      if (cpuShipsSunk === cpuShipsSunkCheck) {
-          cpuShipsSunkCheck++
-          cpuGAH = false
-      }
+     // if (cpuShipsSunk === cpuShipsSunkCheck) {
+     //     cpuShipsSunkCheck++
+     //     cpuGAH = false
+    //  }
        //end Jakon's AI
       if (userSquares[square].classList.contains('mine1')) {
           infoDisplay.innerHTML = 'The CPU hit a mine!'
           turn = false
-          console.log("hitM = " + hitM + "\n")   
-          console.log("hit = " + hit + "\n")
-          console.log("CPU HIT A MINE!\n")
+         // console.log("hitM = " + hitM + "\n")   
+         // console.log("hit = " + hit + "\n")
+         // console.log("CPU HIT A MINE!\n")
       }
       if (userSquares[square].classList.contains('mine2')) {
           infoDisplay.innerHTML = 'The CPU hit a mine!'
           turn = false
-          console.log("hitM = " + hitM + "\n")
-          console.log("hit = " + hit + "\n")
-          console.log("MINE\n")
+       //   console.log("hitM = " + hitM + "\n")
+       //   console.log("hit = " + hit + "\n")
+       //   console.log("MINE\n")
       }
       if (userSquares[square].classList.contains('mine3')) {
           infoDisplay.innerHTML = 'The CPU hit a mine!'
           turn = false
-          console.log("hitM = " + hitM + "\n")
-          console.log("hit = " + hit + "\n")
-          console.log("MINE\n")
+       //   console.log("hitM = " + hitM + "\n")
+       //   console.log("hit = " + hit + "\n")
+       //   console.log("MINE\n")
       }
       if (userSquares[square].classList.contains('mine4')) {
           infoDisplay.innerHTML = 'The CPU hit a mine!'
           turn = false
-          console.log("hitM = " + hitM + "\n")
-          console.log("hit = " + hit + "\n")
-          console.log("MINE\n")
+       //   console.log("hitM = " + hitM + "\n")
+       //   console.log("hit = " + hit + "\n")
+       //   console.log("MINE\n")
       }
       if (userSquares[square].classList.contains('destroyer')) {
           cpuDestroyerCount++
