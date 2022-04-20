@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const mine2 = document.querySelector('.mine2-container')
   const mine3 = document.querySelector('.mine3-container')
   const mine4 = document.querySelector('.mine4-container')
+  const xBomberButton = document.querySelector('#xBomber')
+  const tBomberButton = document.querySelector('#tBomber')
   const startButton = document.querySelector('#start')
   const rotateButton = document.querySelector('#rotate')
   const turnDisplay = document.querySelector('#whose-go')
@@ -31,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let enemyReady = false
   let allShipsPlaced = false
   let shotFired = -1
+  let xBomberOn = false
+  let tBomberOn = false
+  let xBomberUsed = false
+  let tBomberUsed = false
   //Selected Board
   for (let i=0; i <100; i++) {
     userSquaresSelected[i] = false
@@ -226,6 +232,22 @@ document.addEventListener('DOMContentLoaded', () => {
         setupButtons.style.display = 'none'
         playGameSingle()
       }
+    })
+    xBomberButton.addEventListener('click', () => {
+        if (allShipsPlaced && !xBomberUsed){
+            infoDisplay.innerHTML = "Please pick center hit"
+            console.log("xbomber button")
+            xBomberOn = true
+            xBomberUsed = true
+        }
+    })
+    tBomberButton.addEventListener('click', () => {
+        if (allShipsPlaced && !tBomberUsed) {
+            infoDisplay.innerHTML = "please pick center hit"
+            console.log("tbomber button")
+            tBomberOn = true
+            tBomberUsed = true
+        }
     })
   }
 
@@ -432,12 +454,42 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentPlayer === 'user') {
       turnDisplay.innerHTML = 'Your Go'
       computerSquares.forEach(square => square.addEventListener('click', function(e) {
-        shotFired = square.dataset.id
-        if (userSquaresSelected[shotFired] === false) {
-            computerSquares.forEach(square => square.removeEventListener('click', null))
-           // console.log(shotFired)
-            userSquaresSelected[shotFired] = true
-            revealSquare(square.classList)
+        if (xBomberOn === true) {
+            let centerShotIndex = computerSquares.indexOf(square)
+            let shotsIndex = [centerShotIndex, centerShotIndex-9, centerShotIndex-11, centerShotIndex+9, centerShotIndex+11]
+            for (let i=0; i<shotsIndex.length; i++) {
+                let shotFired = computerSquares[shotsIndex[i]].dataset.id
+                if (userSquaresSelected[shotFired] === false) {
+                    computerSquares.forEach(square => square.removeEventListener('click', null))
+                    userSquaresSelected[shotFired] = true
+                    revealSquare(computerSquares[shotsIndex[i]].classList, false)
+                }
+            }
+            xBomberOn = false
+            enemyGo()
+        }
+        else if (tBomberOn === true) {
+            let centerShotIndex = computerSquares.indexOf(square)
+            let shotsIndex = [centerShotIndex, centerShotIndex+1, centerShotIndex-1, centerShotIndex+10, centerShotIndex-10]
+            for (let i=0; i < shotsIndex.length; i++) {
+                let shotFired = computerSquares[shotsIndex[i]].dataset.id
+                if (userSquaresSelected[shotFired] === false) {
+                    computerSquares.forEach(square => square.removeEventListener('click', null))
+                    userSquaresSelected[shotFired] = true
+                    revealSquare(computerSquares[shotsIndex[i]].classList, false)
+                }
+            }
+            tBomberOn = false
+            enemyGo()
+        }
+        else {
+            shotFired = square.dataset.id
+            if (userSquaresSelected[shotFired] === false) {
+                computerSquares.forEach(square => square.removeEventListener('click', null))
+                // console.log(shotFired)
+                userSquaresSelected[shotFired] = true
+                revealSquare(square.classList, true)
+            }
         }
    //   else
    //         playGameSingle()
@@ -446,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentPlayer === 'enemy') {
       turnDisplay.innerHTML = 'Computers Go'
    //   console.log("calling enemy go")
-      setTimeout(enemyGo, 2000)
+      setTimeout(enemyGo, 1000)
       return
     }
   }
@@ -459,8 +511,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let carrierCount = 0
   let shipsSunk = 0
   let totalCount = 0
+  let allowPlayerSwitch = true
 
-  function revealSquare(classList) {
+  function revealSquare(classList, allowPlayerSwitch) {
+    console.log("allowPlayerSwitch = " + allowPlayerSwitch + "\n")
     const enemySquare = computerGrid.querySelector(`div[data-id='${shotFired}']`)
     //const obj = Object.values(classList)
     if (!classList.contains('boom') && !classList.contains('miss') && !classList.contains('mineboom')) {
@@ -505,7 +559,12 @@ document.addEventListener('DOMContentLoaded', () => {
       enemySquare.classList.add('miss')
     }*/
     checkForWins()
-    currentPlayer = 'enemy'
+    if (!allowPlayerSwitch) {
+        currentPlayer = 'user'
+    }
+    else {
+        currentPlayer = 'enemy'
+    }
     if(gameMode === 'singlePlayer') playGameSingle()
   }
 
