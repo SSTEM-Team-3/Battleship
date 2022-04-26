@@ -115,7 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
       ]
     },
   ]
-
+  
+  turnDisplay.innerHTML = "Please place all your ships and mines then click Start to begin playing"
   createBoard(userGrid, userSquares)
   createBoard(computerGrid, computerSquares)
 
@@ -239,16 +240,23 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("xbomber button")
             xBomberOn = true
             xBomberUsed = true
+            setTimeout(clearDisplay, 5000)
         }
     })
+    //setTimeout(clearDisplay(), 5000)
     tBomberButton.addEventListener('click', () => {
         if (allShipsPlaced && !tBomberUsed) {
             infoDisplay.innerHTML = "please pick center hit"
             console.log("tbomber button")
             tBomberOn = true
             tBomberUsed = true
+            setTimeout(clearDisplay, 5000)
         }
     })
+  }
+
+  function clearDisplay() {
+    infoDisplay.innerHTML = ""
   }
 
   //Create Board
@@ -523,30 +531,37 @@ document.addEventListener('DOMContentLoaded', () => {
       if (classList.contains('mine1') || classList.contains('mine2') || classList.contains('mine3') || classList.contains('mine4')) {
             infoDisplay.innerHTML = "Careful! You hit one of the Computer's mines!"
             console.log("YOU HIT A MINE!\n")
-            enemyGo()
+            setTimeout(clearDisplay, 5000)
+            setTimeout(enemyGo, 5000)
       }
       if (classList.contains('destroyer')) {
           destroyerCount++
+          clearDisplay()
           console.log("destroyerCount: " + destroyerCount + "\n")
       }
       if (classList.contains('destroyer2')) {
           destroyer2Count++
+          clearDisplay()
           console.log("destroyer2Count: " + destroyer2Count + "\n")
       }
       if (classList.contains('submarine')) {
            submarineCount++
+           clearDisplay()
            console.log("submarineCount: " + submarineCount + "\n")
       }
       if (classList.contains('cruiser')) {
           cruiserCount++
+          clearDisplay()
           console.log("cruiserCount: " + cruiserCount + "\n")
       }
       if (classList.contains('battleship')) {
           battleshipCount++
+          clearDisplay()
           console.log("battleshipCount: " + battleshipCount + "\n")
       }
       if (classList.contains('carrier')) {
           carrierCount++
+          clearDisplay()
           console.log("carrierCount: " + carrierCount + "\n")
       }
     }
@@ -592,6 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function enemyGo(square) {
     if (turn === false) {
         infoDisplay.innerHTML = "skipping CPU's turn"
+        setTimeout(clearDisplay, 5000)
         currentPlayer = 'user'
         turnDisplay.innerHTML = 'Your Go'
         turn = true
@@ -669,51 +685,57 @@ document.addEventListener('DOMContentLoaded', () => {
           turn = false
          // console.log("hitM = " + hitM + "\n")   
          // console.log("hit = " + hit + "\n")
-         // console.log("CPU HIT A MINE!\n")
+          console.log("CPU HIT A MINE!\n")
       }
       if (userSquares[square].classList.contains('mine2')) {
           infoDisplay.innerHTML = 'The CPU hit a mine!'
           turn = false
        //   console.log("hitM = " + hitM + "\n")
        //   console.log("hit = " + hit + "\n")
-       //   console.log("MINE\n")
+          console.log("MINE\n")
       }
       if (userSquares[square].classList.contains('mine3')) {
           infoDisplay.innerHTML = 'The CPU hit a mine!'
           turn = false
        //   console.log("hitM = " + hitM + "\n")
        //   console.log("hit = " + hit + "\n")
-       //   console.log("MINE\n")
+          console.log("MINE\n")
       }
       if (userSquares[square].classList.contains('mine4')) {
           infoDisplay.innerHTML = 'The CPU hit a mine!'
           turn = false
        //   console.log("hitM = " + hitM + "\n")
        //   console.log("hit = " + hit + "\n")
-       //   console.log("MINE\n")
+          console.log("MINE\n")
       }
       if (userSquares[square].classList.contains('destroyer')) {
           cpuDestroyerCount++
+          clearDisplay()
      //     console.log("cpuDestroyerCount = " + cpuDestroyerCount + "\n")
       }
       if (userSquares[square].classList.contains('destroyer2')) {
           cpuDestroyer2Count++
+          clearDisplay()
        //   console.log("cpuDestroyer2Count = " + cpuDestroyer2Count + "\n")
       }
       if (userSquares[square].classList.contains('submarine')) {
           cpuSubmarineCount++
+          clearDisplay()
        //   console.log("cpuSubmarineCount = " + cpuSubmarineCount + "\n")
       }
       if (userSquares[square].classList.contains('cruiser')) {
           cpuCruiserCount++
+          clearDisplay()
        //   console.log("cpuCruiserCount = " + cpuCruiserCount + "\n")
       }
       if (userSquares[square].classList.contains('battleship')) {
           cpuBattleshipCount++
+          clearDisplay()
        //   console.log("cpuBattleshipCount = " + cpuBattleshipCount + "\n")
       }
       if (userSquares[square].classList.contains('carrier')) {
           cpuCarrierCount++
+          clearDisplay()
        //   console.log("cpuCarrierCount = " + cpuCarrierCount + "\n")
       }
       checkForWins()

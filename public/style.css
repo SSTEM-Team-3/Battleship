@@ -73,8 +73,8 @@ body {
 
 .grid-computer > .taken,
 .grid-computer > .boom {
-  background-color: hsl(200, 100%, 50%) !important;
-  border-radius: 0 !important;
+  background-color: hsl(200, 100%, 50%);
+  border-radius: 0;
 }
 
 .ship,
