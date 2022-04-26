@@ -72,10 +72,12 @@ body {
 }
 
 .grid-computer > .taken,
-.grid-computer > .boom {
-  background-color: hsl(200, 100%, 50%);
-  border-radius: 0;
+.grid-computer > .boom,
+.grid-computer > .minecpu {
+  background-color: hsl(200, 100%, 50%) !important;
+  border-radius: 0 !important;
 }
+
 
 .ship,
 .taken {
@@ -86,6 +88,11 @@ body {
 .mine,
 .takenM {
   position: relative;
+  background-color: black;
+}
+
+.mine::after,
+.takenM::after {
   background-color: black;
 }
 
@@ -241,7 +248,8 @@ body {
 
 .miss,
 .boom,
-.mineboom {
+.mineboom,
+.minecpu {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -249,7 +257,8 @@ body {
 
 .boom::after,
 .miss::after,
-.mineboom::after {
+.mineboom::after,
+.minecpu::after {
   content: '';
   position: absolute;
   border-radius: 100%;
@@ -269,6 +278,9 @@ body {
   background-color: red;
 }
 
+.minecpu::after {
+  background-color: black;
+}
 
 .miss::before {
   content: '';
@@ -280,9 +292,16 @@ body {
   height: 2vmin;
 }
 
-.boom,
-.mineboom {
+.boom {
   animation: boom .2s ease-out forwards;
+}
+
+.mineboom {
+  animation: mineboom .2s ease-out forwards;
+}
+
+.minecpu {
+  animation: mineboom .2s ease-out forwards;
 }
 
 @keyframes hit {
@@ -308,6 +327,16 @@ body {
 }
 
 @keyframes mineboom {
+  0% {
+    background-color: red;
+  }
+
+  100% {
+    background-color: black;
+  }
+}
+
+@keyframes minecpu {
   0% {
     background-color: red;
   }

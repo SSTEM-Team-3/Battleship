@@ -529,6 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const hit = classList.contains('taken')
       classList.add(hit ? 'boom' : 'miss')
       if (classList.contains('mine1') || classList.contains('mine2') || classList.contains('mine3') || classList.contains('mine4')) {
+            classList.add('minecpu')
             infoDisplay.innerHTML = "Careful! You hit one of the Computer's mines!"
             console.log("YOU HIT A MINE!\n")
             setTimeout(clearDisplay, 5000)
